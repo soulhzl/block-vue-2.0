@@ -1,5 +1,5 @@
 @font-face {font-family: "iconfont";
-  src: url('iconfont.woff?t=1615366498667') format('woff'); /* iOS 4.1- */
+  src: url('iconfont.woff?t=1616053910063') format('woff'); 
 }
 
 .iconfont {
@@ -9,4 +9,3 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-

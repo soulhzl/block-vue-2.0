@@ -40,7 +40,7 @@
       <van-grid>
         <van-grid-item
           @click="showPopup"
-          :icon="isLogin ? 'play-circle-o' : 'importuser-o'"
+          :icon="isLogin ? 'play-circle-o' : 'user-o'"
           :text="isLogin ? '执行' : '登录'"
         />
         <van-grid-item @click="downXml" icon="down" text="下载" />
@@ -60,6 +60,9 @@ import { mapState } from "vuex";
 import "blockly/javascript_compressed.js";
 import "../util/jscode.js";
 import generateTemplate from "../util/template.js";
+import url from "@/serviceAPI.config.js";
+import JWTDecode from "jwt-decode";
+import { Notify } from "vant";
 export default {
   name: "Home",
   components: {
@@ -68,10 +71,10 @@ export default {
   },
   data() {
     return {
-      show: false,
+      show: true,
       username: "",
       password: "",
-      isLogin: true,
+      isLogin: false,
     };
   },
   computed: {
@@ -124,7 +127,6 @@ export default {
         return;
       }
       let reader = new FileReader();
-      const that = this;
       reader.onloadend = (event) => {
         let target = event.target;
         if (target.readyState == 2) {
@@ -149,9 +151,39 @@ export default {
       const src = URL.createObjectURL(blob);
       this.createDownLoad(src);
     },
-    submitLogin() {},
+    async submitLogin() {
+      const res = await this.$axios.post(url.lorUser, {
+        username: this.username,
+        password: this.password,
+      });
+      if (res && (res.data.msg == "登录成功" || res.data.msg == "注册成功")) {
+        const token = res.data.data;
+        localStorage.setItem("usertoken", token);
+        const decoded = JWTDecode(token);
+        this.$store.dispatch("setAuth", decoded);
+        Notify({
+          message: res.data.msg,
+          duration: 1000,
+          background: "#1989fa",
+        });
+        this.show = !this.show;
+        this.isLogin = !this.isLogin;
+      } else {
+        Notify({
+          message: res.data.msg,
+          duration: 1000,
+        });
+      }
+    },
   },
-  mounted() {},
+  mounted() {
+    if (localStorage.usertoken) {
+      this.$nextTick(() => {
+        this.show = !this.show;
+        this.isLogin = true;
+      });
+    }
+  },
 };
 </script>
 

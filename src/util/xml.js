@@ -143,4 +143,8 @@ export default `<xml style="display: none">
       <block type="echart_z"></block>
       <block type="echart_barWidth"></block>
     </category>
+    <sep></sep>
+    <category name="模块" colour="">
+      <block type="echart_module_line"></block>
+    </category>
 </xml>`

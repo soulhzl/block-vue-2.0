@@ -86,10 +86,10 @@ Blockly.JavaScript['echart_lgcolor'] = function (block) {
     let ecolor = Blockly.JavaScript.valueToCode(block, 'ecolor', Blockly.JavaScript.ORDER_ATOMIC);
     scolor = scolor || '#fff'
     ecolor = ecolor || '#fff'
-    if(scolor.indexOf('#') != -1){
+    if (scolor.indexOf('#') != -1) {
         scolor = '"' + scolor + '"'
     }
-    if(ecolor.indexOf('#') != -1){
+    if (ecolor.indexOf('#') != -1) {
         ecolor = '"' + ecolor + '"'
     }
     const code = `new this.$echart.graphic.LinearGradient(${x1}, ${y1}, ${x2}, ${y2}, [
@@ -142,7 +142,7 @@ Blockly.JavaScript['echart_trigger'] = function (block) {
 }
 
 Blockly.JavaScript['echart_show'] = function (block) {
-    return returnFieldCode(block, 'show')
+    return `show: ${block.getFieldValue('show')},\n`
 }
 
 Blockly.JavaScript['echart_fontSize'] = function (block) {
@@ -159,4 +159,53 @@ Blockly.JavaScript['echart_z'] = function (block) {
 
 Blockly.JavaScript['echart_barWidth'] = function (block) {
     return returnValueCode(block, 'barWidth')
+}
+
+Blockly.JavaScript['echart_module_line'] = function (block) {
+    const axis = block.getFieldValue('axis')
+    const firstaxis = Blockly.JavaScript.valueToCode(block, 'firstaxis', Blockly.JavaScript.ORDER_ATOMIC)
+    let axisText = ''
+    if (axis == 'xAxis') {
+        axisText = `xAxis: {
+        data: ${firstaxis},
+        },
+        yAxis: {
+        },`
+    } else {
+        axisText = `xAxis: {
+        },
+        yAxis: {
+        data: ${firstaxis},
+        },`
+    }
+    const secondaxis = Blockly.JavaScript.valueToCode(block, 'secondaxis', Blockly.JavaScript.ORDER_ATOMIC)
+    console.log(block.getFieldValue('title'))
+    let borderRadius = ''
+    if(block.getFieldValue('borderradius')){
+        borderRadius = `borderRadius: [0, 80, 80, 0],`
+    }
+    const color = Blockly.JavaScript.valueToCode(block, 'color', Blockly.JavaScript.ORDER_ATOMIC)
+    let code = `let option = {
+        grid: {
+          containLabel: 'true',
+        },
+        title: {
+          text: '怎么开心怎么玩',
+        },
+        series: [{
+          label: {
+            show: ${block.getFieldValue('showlabel') != 'false' ? true : false},
+          },
+          type: 'line',
+          name: 'series',
+          data: ${secondaxis},
+          itemStyle: {
+            color: ${color},
+            ${borderRadius}
+          },
+        }],
+        ${axisText}
+      }
+      this.echart.setOption(option)`
+    return code
 }

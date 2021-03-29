@@ -5,17 +5,16 @@
 </template>
 
 <script>
-// import JWTDecode from 'jwt-decode'
+import JWTDecode from 'jwt-decode'
 export default {
-  // mounted() {
-  //   // 判断是否有token
-  //   if (localStorage.eleToken) {
-  //     // 将token解析
-  //     const decoded = JWTDecode(localStorage.eleToken);
-  //     this.$store.dispatch("setAuthenticated", decoded);
-  //     this.$store.dispatch("setUser", decoded);
-  //   }
-  // },
+  mounted() {
+    // 判断是否有tokent
+    if (localStorage.usertoken) {
+      // 将token解析
+      const decoded = JWTDecode(localStorage.usertoken);
+      this.$store.dispatch("setAuth", decoded);
+    }
+  },
 };
 // 根据屏幕大小设置字体大小
 document.addEventListener("DOMContentLoaded", () => {

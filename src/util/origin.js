@@ -34,6 +34,12 @@ let createImg = (a, name) => {
         case '图表':
             icontext = '&#xe600;'
             break;
+        case '颜色':
+            icontext = '&#xe60b;'
+            break;
+        case '模块':
+            icontext = '&#xe711;'
+            break;
     }
     myicon.innerHTML = icontext
     myicon.style.color = 'white'
